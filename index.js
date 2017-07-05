@@ -1,5 +1,6 @@
 const { encodeText, decodeText } = require("./text");
 const { encodeInt, decodeInt } = require("./int");
+const { uint, string, json, u8 } = require("./symbols");
 
 
 // Uint32Arrays must have a byte-offset divisible by 4.
@@ -48,10 +49,10 @@ const ident = x => x;
 
 const getTypedPacker = types => {
   const transformers = types.map(t => {
-    if (t === "int") { return encodeInt; }
-    if (t === "string") { return encodeText; }
-    if (t === "json") { return obj => encodeText(JSON.stringify(obj)); }
-    if (t === "u8") { return ident; }
+    if (t === uint) { return encodeInt; }
+    if (t === string) { return encodeText; }
+    if (t === json) { return obj => encodeText(JSON.stringify(obj)); }
+    if (t === u8) { return ident; }
     if (typeof t === "object") {
       if (Object.getPrototypeOf(t) !== Object.prototype) {
         throw new Error("Cannot serialize objects with prototype methods.");
@@ -66,10 +67,10 @@ const getTypedPacker = types => {
 
 const getTypedUnpacker = types => {
   const transformers = types.map(t => {
-    if (t === "int") { return decodeInt; }
-    if (t === "string") { return decodeText; }
-    if (t === "json") { return arr => JSON.parse(decodeText(arr)); }
-    if (t === "u8") { return ident; }
+    if (t === uint) { return decodeInt; }
+    if (t === string) { return decodeText; }
+    if (t === json) { return arr => JSON.parse(decodeText(arr)); }
+    if (t === u8) { return ident; }
     if (typeof t === "object") {
       if (Object.getPrototypeOf(t) !== Object.prototype) {
         throw new Error("Cannot serialize objects with prototype methods.");
@@ -101,4 +102,4 @@ const codec = schema => {
   return { encode, decode };
 };
 
-module.exports = codec;
+module.exports = { codec, uint, string, json, u8 };

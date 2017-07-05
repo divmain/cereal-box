@@ -5,13 +5,15 @@ Painless object (de)serialization with simple schemas, optimized for speed (and 
 ## Quick start
 
 ```javascript
+import { uint, string, json, u8 } from "cereal-box";
+
 const { encode, decode } = codec({
-  id: "int",
-  url: "string",
-  method: "string",
+  id: uint,
+  url: string,
+  method: string,
   headers: {
-    accept: "string",
-    "user-agent": "string"
+    accept: string,
+    "user-agent": string
   }
 });
 
@@ -51,9 +53,9 @@ console.log(JSON.stringify(decode(encoded), null, 2));
 
 The following field types are supported:
 
-- `int`: An unsigned integer.
+- `uint`: An unsigned integer.
 - `string`: A string.
 - `json`: A simple, hierarchical data-structure that can be JSON serialized.
-- `typed`: A Uint8Array instance.
+- `u8`: A Uint8Array instance.
 
 Additionally, hierarchical data-structures are supported by passing an object where the values are valid field types.
